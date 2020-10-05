@@ -16,7 +16,7 @@ class LinkedInBot:
         
     def sign_in(self, username, password, use_js = True):
         if(self.driver.current_url != 'https://www.linkedin.com/'):
-            return('Must be in the LinkedIn initial website.')
+            raise Exception("Sorry, LinkedIn has probably thrown a captcha. Try again some other time.")
         
         write_to_element(self.driver, '//*[(@id = "session_key")]', username, use_js)
         sleep(2)
@@ -49,15 +49,26 @@ class LinkedInBot:
 
         return(authors)
 
-    def df_author_post(self):
+    def df_author_post(self, tags=None, authors=None) :
         df = pd.DataFrame(
             {'author_name': self._authors().get('name'),
             'author_title': self._authors().get('title'),
             'post': self._posts()}
         )
 
-        df.propaganda = df.apply(lambda row: 'followers' in row.author_title, axis=1)
+        # Filtering propagand on the Feed
+        df['propaganda'] = df.apply(lambda row: 'followers' in row.author_title, axis = 1)
         df = df[df.propaganda == False]
+        df = df.drop(columns='propaganda')
+
+        # Filtering for the tags and authors that we wants
+        if tags is not None:
+            for tag in tags:
+                tag = '#' + tag
+                df = df[df.apply(lambda row: tag in row.post, axis=1)]
+        if authors is not None:
+            for author in authors:
+                df = df[df.apply(lambda row: author in row.author_title, axis = 1)]
 
         return(df)
     
@@ -74,10 +85,11 @@ bot.sign_in(secret.username, secret.password)
 sleep(1)
 
 for i in range(3):
+    sleep(4)
     bot.scroll_down()
 
+sleep(1)
 df = bot.df_author_post()
 print(df)
 
 bot.quit()
-
