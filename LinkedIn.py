@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from time import sleep
+from datetime import datetime
 from utils_functions import write_to_element
 import secret
 import pandas as pd
@@ -8,7 +9,7 @@ import pandas as pd
 class LinkedInBot:
     def __init__(self, webdriver_path):
         chrome_options = webdriver.chrome.options.Options()
-        chrome_options.add_argument('headless')
+        #chrome_options.add_argument('--headless')
 
         self.driver = webdriver.Chrome(webdriver_path, options=chrome_options)
         self.driver.get('https://www.linkedin.com/')
@@ -31,44 +32,71 @@ class LinkedInBot:
         self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
     def _posts(self):
-        posts = self.driver.find_elements_by_css_selector('.feed-shared-update-v2__commentary span')
-        posts = list(set([post.text for post in posts]))
+        feed-shared-text relative feed-shared-update-v2__commentary  ember-view
+        feed-shared-text relative feed-shared-update-v2__commentary  ember-view
+        posts = self.driver.find_elements_by_css_selector('div.feed-shared-update-v2__commentary span')
+        #posts = pd.Series([post.text for post in posts]).drop_duplicates().tolist()
+        posts1 = pd.Series([post.text for post in posts]).drop_duplicates().tolist()
+        posts = [post.text for post in posts]
+
+        print('post_w_filter')
+        print(len(posts1))
+        print('posts_w/o_filter')
+        print(len(posts))
         return(posts)
 
     def _authors(self):
-        authors_name = self.driver.find_elements_by_css_selector('.feed-shared-actor__title .feed-shared-actor__name')
-        authors_titles = self.driver.find_elements_by_css_selector('.feed-shared-actor__description')
-        
-        authors_name = pd.Series([author.text for author in authors_name]).drop_duplicates().tolist()
-        authors_titles = pd.Series([author_title.text for author_title in authors_titles]).drop_duplicates().tolist()
+        authors_name = self.driver.find_elements_by_css_selector('span.feed-shared-actor__title')
+        authors_titles = self.driver.find_elements_by_css_selector('span.feed-shared-actor__description t-12 t-normal t-black--light')
+        authors_name = [author.text for author in authors_name]
+        authors_titles = [author_title.text for author_title in authors_titles]
+
+        #authors_name = pd.Series([author.text for author in authors_name]).drop_duplicates().tolist()
+        #authors_titles = pd.Series([author_title.text for author_title in authors_titles]).drop_duplicates().tolist()
+
+        print('autores')
+        print(len(authors_name))
+        print(len(authors_titles))
 
         authors = {
             'name': authors_name,
             'title': authors_titles
         }
-
         return(authors)
 
-    def df_author_post(self, tags=None, authors=None) :
+    def df_author_post(self, tags=None, authors=None):
+        """ Scraping in the feed on the current window the author's name and title along with each post.
+        Also, we could filter by tags in the post and author's name. 
+
+        Return: 
+                Pandas.DataFrame
+
+        Args:
+            tags (list): list of tags to filter the posts. Defaults to None.
+            authors (list): list of authors names. Defaults to None.
+        """
+
         df = pd.DataFrame(
             {'author_name': self._authors().get('name'),
             'author_title': self._authors().get('title'),
             'post': self._posts()}
         )
-
-        # Filtering propagand on the Feed
-        df['propaganda'] = df.apply(lambda row: 'followers' in row.author_title, axis = 1)
+        
+        # Filtering propaganda on the Feed
+        """ df['propaganda'] = df.apply(lambda row: 'followers' in row.author_title, axis = 1)
         df = df[df.propaganda == False]
-        df = df.drop(columns='propaganda')
+        df = df.drop(columns='propaganda') """
 
         # Filtering for the tags and authors that we wants
         if tags is not None:
             for tag in tags:
                 tag = '#' + tag
+                # Checking if there a tag in each post
                 df = df[df.apply(lambda row: tag in row.post, axis=1)]
         if authors is not None:
             for author in authors:
-                df = df[df.apply(lambda row: author in row.author_title, axis = 1)]
+                # Checking if the author name is the one selected
+                df = df[df.apply(lambda row: author in row.author_name, axis = 1)]
 
         return(df)
     
@@ -84,12 +112,13 @@ bot = LinkedInBot(webdriver_path_windows)
 bot.sign_in(secret.username, secret.password)
 sleep(1)
 
-for i in range(3):
-    sleep(4)
-    bot.scroll_down()
-
-sleep(1)
 df = bot.df_author_post()
 print(df)
 
-bot.quit()
+for i in range(20):
+    print(i)
+    sleep(1)
+    bot.scroll_down()
+
+df = bot.df_author_post()
+print(df)
