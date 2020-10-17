@@ -3,14 +3,13 @@ from selenium.webdriver.common.keys import Keys
 from time import sleep
 from datetime import datetime
 from utils_functions import write_to_element
-import secret
 import itertools
 import pandas as pd
 
-class LinkedInBot:
+class bot:
     def __init__(self, webdriver_path):
         chrome_options = webdriver.chrome.options.Options()
-        #chrome_options.add_argument('--headless')
+        chrome_options.add_argument('--headless')
 
         self.driver = webdriver.Chrome(webdriver_path, options=chrome_options)
         self.driver.get('https://www.linkedin.com/')
@@ -83,19 +82,4 @@ class LinkedInBot:
     def quit(self):
         sleep(1)
         self.driver.close()
-
-
-webdriver_path_linux = '/home/adriel_martins/Downloads/chromedriver'
-webdriver_path_windows = 'C:\Program Files (x86)\chromedriver.exe'
-
-bot = LinkedInBot(webdriver_path_windows)
-bot.sign_in(secret.username, secret.password)
-
-print(bot.df_author_post())
-
-for i in range(100):
-    sleep(1)
-    bot.scroll_down()
-
-df = bot.df_author_post()
-print(df)
+        self.driver.quit()
