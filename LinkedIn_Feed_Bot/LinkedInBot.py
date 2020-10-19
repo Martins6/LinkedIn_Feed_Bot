@@ -2,7 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from time import sleep
 from datetime import datetime
-from utils_functions import write_to_element
+from LinkedIn_Feed_Bot.utils import write_to_element 
 import itertools
 import pandas as pd
 
@@ -47,9 +47,8 @@ class bot:
         df = pd.DataFrame(columns=('author_name', 'author_title', 'post'))
 
         for i, fb in enumerate(feed_boxes):
-            like_bar =  fb.find_elements_by_css_selector('.feed-shared-social-action-bar--has-social-counts')
             post =  fb.find_elements_by_css_selector('div.feed-shared-update-v2__commentary')
-            name =  fb.find_elements_by_css_selector('span.feed-shared-actor__title')
+            name =  fb.find_elements_by_css_selector('span.feed-shared-actor__title .hoverable-link-text.t-black span')
             title =  fb.find_elements_by_css_selector('span.feed-shared-actor__description')
 
             # The object of feed boxes, is not unique.
