@@ -7,6 +7,10 @@ import itertools
 import pandas as pd
 
 class bot:
+    """This is a bot that does three things: sign-in, 
+    scroll through the Feed and extract data from the Feed.
+    """
+
     def __init__(self, webdriver_path):
         chrome_options = webdriver.chrome.options.Options()
         chrome_options.add_argument('--headless')
@@ -16,6 +20,19 @@ class bot:
         sleep(5)
         
     def sign_in(self, username, password, use_js = True):
+        """Input your username and password in order to sign in to LinkedIn.
+         No data is kept, of course. 
+
+        Args:
+            username (str)
+            password (str)
+            use_js (bool, optional): The use_js argument is for the user to choose 
+            between native Selenium input of data or the use of js scripts to inscribe data. Defaults to True.
+
+        Raises:
+            Exception: Sometimes, if the user uses too much, LinkedIn will probably throw a captcha.
+            Other than that, may be some error with the Webdriver.
+        """
         if(self.driver.current_url != 'https://www.linkedin.com/'):
             raise Exception("Sorry, LinkedIn has probably thrown a captcha. Try again some other time.")
         
@@ -29,10 +46,11 @@ class bot:
         sleep(5)
 
     def scroll_down(self):
+        sleep(1)
         self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
     def df_author_post(self, tags=None, authors=None):
-        """ Scraping in the feed on the current window the author's name and title along with each post.
+        """Scraping in the feed on the current window the author's name and title along with each post.
         Also, we could filter by tags in the post and author's name. 
 
         Return: 

@@ -12,11 +12,18 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/Martins6/LinkedIn_Feed_Bot",
-    packages=setuptools.find_packages(),
+    packages=setuptools.find_packages(), 
+    install_requires=[
+          'selenium',
+          'pandas',
+          'xhtml2pdf',
+          'markdown',
+    ],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Operating System :: OS Independent",
     ],
-    python_requires='>=3.6',
+    python_requires='>=3.6.0',
+    
 )

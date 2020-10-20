@@ -1,7 +1,9 @@
 import pandas as pd
 import io
 
-def daily_feed_template_md(output_filename, df):
+def daily_feed_template_md(output_filename, pd_df = None, csv_path = None):
+    if(pd_df == None & csv_path == None):
+        raise Exception
     df = pd.read_csv('data.csv')
 
     f = io.open(output_filename, "w", encoding="utf-8")
