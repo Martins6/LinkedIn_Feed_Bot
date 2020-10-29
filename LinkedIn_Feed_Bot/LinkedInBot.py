@@ -3,6 +3,7 @@ from selenium.webdriver.common.keys import Keys
 from time import sleep
 from datetime import datetime
 from LinkedIn_Feed_Bot.utils import write_to_element 
+from LinkedIn_Feed_Bot.utils import choose_webdriver
 import itertools
 import pandas as pd
 
@@ -10,12 +11,8 @@ class bot:
     """This is a bot that does three things: sign-in, 
     scroll through the Feed and extract data from the Feed.
     """
-
-    def __init__(self, webdriver_path):
-        chrome_options = webdriver.chrome.options.Options()
-        chrome_options.add_argument('--headless')
-
-        self.driver = webdriver.Chrome(webdriver_path, options=chrome_options)
+    def __init__(self, browser):
+        self.driver = choose_webdriver(browser)
         self.driver.get('https://www.linkedin.com/')
         sleep(5)
         

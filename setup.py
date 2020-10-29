@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="LinkedIn_Feed_Bot",
-    version="0.1.3",
+    version="0.2.0",
     author="Adriel Martins",
     author_email="am.adriel.martins@gmail.com",
     description="LinkedIn Feed crawler with Selenium.",
