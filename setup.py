@@ -18,6 +18,7 @@ setuptools.setup(
           'pandas',
           'xhtml2pdf',
           'markdown',
+          'webdriver_manager'
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
