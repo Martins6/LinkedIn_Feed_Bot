@@ -22,7 +22,7 @@ from LinkedIn_Feed_Bot import LinkedInBot
 from LinkedIn_Feed_Bot import md_writer
 from LinkedIn_Feed_Bot import md_to_pdf
 
-# Currently, it is only supported Firefox and Google Chrome browser.
+# Currently, it only supports Firefox and Google Chrome browser.
 bot = LinkedInBot.bot('chrome') 
 
 bot.sign_in(secret.username, secret.password)
