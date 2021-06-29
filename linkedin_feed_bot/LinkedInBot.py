@@ -2,8 +2,8 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from time import sleep
 from datetime import datetime
-from LinkedIn_Feed_Bot.utils import write_to_element 
-from LinkedIn_Feed_Bot.utils import choose_webdriver
+from linkedin_feed_bot.utils import write_to_element 
+from linkedin_feed_bot.utils import choose_webdriver
 import itertools
 import pandas as pd
 

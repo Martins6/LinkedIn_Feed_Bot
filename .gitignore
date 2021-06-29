@@ -1,9 +1,8 @@
+# VsCode
+.vscode/
+
 # This Project Related files
 secret.py
-
-# Local tests
-tests/
-test.py
 
 # VSCode
 *.code-workspace
