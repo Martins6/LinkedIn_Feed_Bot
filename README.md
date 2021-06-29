@@ -6,10 +6,11 @@ Contributions are very much welcome! If you'd like to contribute open an issue o
 
 ## Installation
 
-You can install this package throught pip. Just run:
+You can install this package throught pip or Poetry. Just run:
 
 ```{python}
 pip install LinkedIn_Feed_Bot
+poetry add LinkedIn_Feed_Bot
 ```
 
 ## Usage
@@ -27,12 +28,32 @@ bot = LinkedInBot.bot('chrome')
 
 bot.sign_in(secret.username, secret.password)
 
+# Scrolling through the pages.
 for i in range(10):
     bot.scroll_down()
 
+# Getting all the information that was loaded
+# while scrolling.
 df = bot.df_author_post()
 
+# Writting the Markdown
 md_writer.feed_template_md('test.md', df)
-
+# Converting to pdf.
 md_to_pdf.convert('test.md')
+```
+
+# For developers
+
+You need to have [Poetry](https://python-poetry.org/) installed. But after that process, you just need to do your changes and to install it in the Poetry env, just run:
+
+```{python}
+poetry install
+```
+
+And the new alterations of the package will be installed in the Poetry env.
+
+## Testing
+
+```{python}
+poetry run python -m unittest discover -s tests -v
 ```

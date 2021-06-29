@@ -33,7 +33,7 @@ def choose_webdriver(browser):
     if browser == 'chrome':
         options = chrome_options()
         # silent mode
-        #options.add_argument('--headless')
+        options.add_argument('--headless')
         # no printing log in the terminal
         options.add_argument("--log-level=3")
         driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), options=options)

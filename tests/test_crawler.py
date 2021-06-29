@@ -1,10 +1,6 @@
 import unittest
 from linkedin_feed_bot.LinkedInBot import bot as LI_bot
 
-secret = {
-    'username': 'am.adriel.martins@gmail.com',
-    'password': 'NHt^UV7Ez5QHn&'
-}
 
 class LinkedInBot_Tester(unittest.TestCase):
     def test_signin(self):
@@ -12,10 +8,10 @@ class LinkedInBot_Tester(unittest.TestCase):
         Test that it can sign in.
         """
         bot = LI_bot('chrome')
-        # secret = {
-        #     'username': input('LinkedIn username: '),
-        #     'password': input('LinkedIn password: ')
-        # }
+        secret = {
+            'username': input('LinkedIn username: '),
+            'password': input('LinkedIn password: ')
+        }
         bot.sign_in(secret['username'], secret['password'])
         
         self.assertTrue(True)
@@ -25,10 +21,10 @@ class LinkedInBot_Tester(unittest.TestCase):
         Test the crawling of information.
         """
         bot = LI_bot('chrome')
-        # secret = {
-        #     input('LinkedIn username: '),
-        #     input('LinkedIn password: ')
-        # }
+        secret = {
+            input('LinkedIn username: '),
+            input('LinkedIn password: ')
+        }
         bot.sign_in(secret['username'], secret['password'])
         
         for i in range(10):
